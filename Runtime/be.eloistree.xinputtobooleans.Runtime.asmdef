@@ -1,0 +1,23 @@
+{
+    "name": "be.eloistree.xinputtobooleans",
+    "rootNamespace": "",
+    "references": [
+        "be.eloistree.booleanstatemachines",
+        "be.eloistree.booleanhistory",
+        "be.eloistreebasedonspeps.xinputdotnet"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "WindowsStandalone32",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

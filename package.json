@@ -1,0 +1,27 @@
+
+{                                                                                
+  "name": "be.eloistree.xinputtobooleans",                              
+  "displayName": "XInput Dot Net To Booleans",                        
+  "version": "0.0.1",                         
+  "unity": "2018.1",                             
+  "unityRelease": "",                             
+  "description": "Convert the XInput of Speps XInputDotNet to a booleans usable in a booleans state machine.",                         
+  "keywords": ["Script","Tool"],                       
+  "dependencies":{
+    "be.eloistreebasedonspeps.xinputdotnet":"0.0.1",
+    "be.eloistree.booleanstatemachines":"0.0.1"
+
+  },     
+  "relatedPackages":{},     
+  "samples" : [],     
+  "author" : {
+"name":"",
+"mail":"",
+"url":""},     
+  "repository":{
+"type":"Git",
+"url":"https://gitlab.com/EloiStree/2020_11_26_XInputToBoolean.git",
+"footprint":"",
+"revision":"6e7a406dddbe5a70db61f478b298d526ea5adec3"},     
+  "category": "Script"                   
+} 
