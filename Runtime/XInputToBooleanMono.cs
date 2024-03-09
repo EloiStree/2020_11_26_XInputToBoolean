@@ -2,11 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 // Required in C#
 using XInputDotNetPure;
 
 public class XInputToBooleanMono : MonoBehaviour
 {
+
+    public Namedboolean m_onNamedBooleanChanged;
+    [System.Serializable]
+    public class Namedboolean : UnityEvent<string, bool> { }
 
     public PlayerObserved[] m_player = new PlayerObserved[] {
         new PlayerObserved(PlayerIndex.One),
@@ -42,7 +47,6 @@ public class XInputToBooleanMono : MonoBehaviour
         }
     }
 
-    public BooleanStateRegisterMono m_register;
     public bool m_useUnityRefreshHardware = true;
     public float m_timeBetweenRefreshInMs = 30f;
 
@@ -54,12 +58,7 @@ public class XInputToBooleanMono : MonoBehaviour
 
     public void RefreshHardwareInfo() {
 
-        if (m_register == null)
-            return;
-        BooleanStateRegister register = null;
-        m_register.GetRegister(ref register);
-        if (register == null)
-            return;
+        
 
         for (int y = 0; y < m_player.Length; y++)
         {
@@ -69,13 +68,20 @@ public class XInputToBooleanMono : MonoBehaviour
 
             for (int i = 0; i < player.m_boolObserved.Count; i++)
             {
-                player.m_boolObserved[i].m_debugValue = GetBoolValue(ref player, player.m_boolObserved[i].m_value);
-                register.Set(player.m_boolObserved[i].m_name, player.m_boolObserved[i].m_debugValue);
+                bool currentValue = GetBoolValue(ref player, player.m_boolObserved[i].m_value);
+                bool previousValue = player.m_boolObserved[i].m_debugValue;
+                //Not the most clean ever to use debug value
+                player.m_boolObserved[i].m_debugValue = currentValue;
+
+                if(currentValue!=previousValue)
+                    m_onNamedBooleanChanged.Invoke(player.m_boolObserved[i].m_name, player.m_boolObserved[i].m_debugValue);
+                //register.Set(player.m_boolObserved[i].m_name, player.m_boolObserved[i].m_debugValue);
             }
             for (int i = 0; i < player.m_floatObserved.Count; i++)
             {
                 player.m_floatObserved[i].m_debugValue = GetBoolValueOfFloat(ref player, player.m_floatObserved[i].m_value);
-                register.Set(player.m_floatObserved[i].m_name, player.m_floatObserved[i].m_debugValue);
+                m_onNamedBooleanChanged.Invoke(player.m_floatObserved[i].m_name, player.m_floatObserved[i].m_debugValue);
+                //register.Set(player.m_floatObserved[i].m_name, player.m_floatObserved[i].m_debugValue);
             }
 
             //// Detect if a button was pressed this frame
@@ -207,14 +213,16 @@ public class XInputToBooleanMono : MonoBehaviour
             this.m_name = booleanName;
         }
     }
+
+    [System.Serializable]
+    public class FloatValue
+    {
+        public float m_minValue = 0, m_maxValue = 1;
+        public XInputFloatableValue m_target;
+    }
+
 }
 
-
-[System.Serializable]
-public class FloatValue {
-    public float m_minValue=0, m_maxValue=1;
-    public XInputFloatableValue m_target;
-}
 
 public enum XInputFloatableValue { 
     TriggerLeft,
