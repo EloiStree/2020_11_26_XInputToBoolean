@@ -1,10 +1,10 @@
 {
-    "name": "be.eloistree.xinputtobooleans",
+    "name": "be.elab.xinputtobooleans",
     "rootNamespace": "",
     "references": [
-        "be.eloistree.booleanstatemachines",
-        "be.eloistree.booleanhistory",
-        "be.eloistreebasedonspeps.xinputdotnet"
+        "be.elab.booleanstatemachines",
+        "be.elab.booleanhistory",
+        "be.elab.xinputdotnet"
     ],
     "includePlatforms": [
         "Editor",
