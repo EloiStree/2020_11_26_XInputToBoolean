@@ -31,9 +31,20 @@ public class XInputToAxisFloatEventMono : MonoBehaviour
     [System.Serializable]
     public class ObservedAxis
     {
+        public string m_arrayLabel = "";
         public PlayerIndex m_player;
         public XInputFloatableValue m_axis;
         public FloatEvent m_onFloatPushed;
+        public float m_lastValuePushed;
+        
+        public ObservedAxis(PlayerIndex playerInex, XInputFloatableValue axisName)
+        
+        {
+            this.m_arrayLabel = playerInex.ToString() + " " + axisName.ToString();
+            this.m_player = playerInex;
+            this.m_axis = axisName;
+        }
+       
 
         [System.Serializable]
         public class FloatEvent :UnityEvent<float>{ }
@@ -42,12 +53,47 @@ public class XInputToAxisFloatEventMono : MonoBehaviour
     public bool m_useUnityRefreshHardware = true;
     public float m_timeBetweenRefreshInMs = 30f;
 
+
+    [ContextMenu("Set to one player observed")]
+    public void SetPlayerObservedToOne()
+    {
+        m_axisObserved.Clear();
+        AddPlayer(PlayerIndex.One);
+    }
+    [ContextMenu("Set to two player observed")]
+    public void SetPlayerObservedToTwo()
+    {
+        m_axisObserved.Clear();
+        AddPlayer(PlayerIndex.One);
+        AddPlayer(PlayerIndex.Two);
+    }
+    [ContextMenu("Set to four player observed")]
+    public void SetPlayerObservedToFour()
+    {
+        m_axisObserved.Clear();
+        AddPlayer(PlayerIndex.One);
+        AddPlayer(PlayerIndex.Two);
+        AddPlayer(PlayerIndex.Three);
+        AddPlayer(PlayerIndex.Four);
+    }
+
+    private void AddPlayer(PlayerIndex index)
+    {
+        m_axisObserved.Add(new ObservedAxis (index,  XInputFloatableValue.TriggerLeft ));
+        m_axisObserved.Add(new ObservedAxis (index,  XInputFloatableValue.TriggerRight));
+        m_axisObserved.Add(new ObservedAxis (index,  XInputFloatableValue.JoystickLeftEast));
+        m_axisObserved.Add(new ObservedAxis (index,  XInputFloatableValue.JoystickLeftNorth));
+        m_axisObserved.Add(new ObservedAxis (index,  XInputFloatableValue.JoystickRightEast));
+        m_axisObserved.Add(new ObservedAxis (index,  XInputFloatableValue.JoystickRightNorth));
+    }
+
     private void Start()
     {
         if (m_useUnityRefreshHardware)
             InvokeRepeating("RefreshHardwareInfo", 0, m_timeBetweenRefreshInMs / 1000f);
     }
 
+    
     public void RefreshHardwareInfo()
     {
 
@@ -61,6 +107,7 @@ public class XInputToAxisFloatEventMono : MonoBehaviour
         {
             float value = GetBoolValueOfFloat(ref item.m_player, ref item.m_axis);
             item.m_onFloatPushed.Invoke(value);
+            item.m_lastValuePushed = value;
         }
 
     }
